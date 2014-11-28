@@ -1,0 +1,4 @@
+.DS_Store
+
+# Keep out code coverage files; they are generated on Travis
+*.cov
