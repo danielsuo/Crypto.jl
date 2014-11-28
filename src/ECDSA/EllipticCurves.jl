@@ -4,7 +4,7 @@ module EllipticCurves
 
 ##############################################################################
 ##
-## Exported methods and types
+## Exported functions and types
 ##
 ##############################################################################
 
@@ -52,7 +52,7 @@ type ConcretePoint <: Point
   c::Curve
   
   function ConcretePoint(x::Number, y::Number, c::Curve)
-    y*y == x*x*x + c.a*x + c.b ? new(x, y, c) : error("Point is not on curve.")
+    y * y == x * x * x + c.a * x + c.b ? new(x, y, c) : error("Point is not on curve.")
   end
 end
 
@@ -114,8 +114,8 @@ function +(p1::ConcretePoint, p2::ConcretePoint)
     m = (p2.y-p1.y) / (p2.x-p1.x)
   end
   
-  new_x = m*m - p2.x - p1.x
-  new_y = m*(new_x - p1.x) + p1.y
+  new_x = m * m - p2.x - p1.x
+  new_y = m * (new_x - p1.x) + p1.y
   
   return ConcretePoint(new_x, -new_y, p1.c)
 end

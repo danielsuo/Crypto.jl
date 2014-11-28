@@ -7,6 +7,7 @@ module Crypto
 ##############################################################################
 
 include("Util/c.jl")
+include("Util/Key.jl")
 
 include("SHA2/SHA2.jl")
 include("RIPEMD/RIPEMD.jl")
