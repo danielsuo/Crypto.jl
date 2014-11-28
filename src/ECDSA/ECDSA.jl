@@ -1,7 +1,6 @@
-# module ECDSA
+module ECDSA
 
 include("EllipticCurves.jl")
+include("FiniteFields.jl")
 
-
-
-# end # module ECDSA
+end # module ECDSA

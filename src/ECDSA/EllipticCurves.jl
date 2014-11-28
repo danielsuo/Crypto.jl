@@ -1,6 +1,6 @@
 module EllipticCurves
 
-# NOTE: Borrowed heavily from @wwilson
+# NOTE: From from @wwilson, based on Jeremy Kun
 
 ##############################################################################
 ##
