@@ -7,6 +7,15 @@ Crypto.jl
 A library that wraps OpenSSL, but also has pure Julia implementations for reference (not recommended)
 
 # To do
+- Reimplement finite fields
+- Implement ECDSA signing / authentication
+- Test ECDSA and subtypes
+- Add libssl and libcrypto bindings
+- Test libssl and libcrypto
+- Add documentation and reorganize
+- Publish to Julia packages
+
+# Status
 - ~~RIPEMD-160 [ref](https://github.com/bitcoin/bitcoin/blob/master/src/crypto/ripemd160.cpp)~~
   - Clean up [ref](https://maemo.gitorious.org/maemo-pkg/python-crypto/source/8651b0eace17916fe7ba14923dbe4054f255ec2a:lib/Crypto/Hash/RIPEMD160.py)
   - Fix bug for more than one chunk
