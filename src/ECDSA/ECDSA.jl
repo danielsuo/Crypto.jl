@@ -1,6 +1,10 @@
 module ECDSA
 
-# using Crypto
+using Crypto.Integers
+using Crypto.EllipticCurves
+
+a = makeModular(3, 1061)
+println(a)
 
 # macro c(ret_type, func, arg_types, lib)
 #   local args_in = Any[ symbol(string('a',x)) for x in 1:length(arg_types.args) ]
