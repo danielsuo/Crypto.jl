@@ -20,7 +20,8 @@ import Base.show,
        Base.zero,
        Base.zeros
 
-type Polynomial{T}
+# TODO: Rethink this subclassing; polynomial is a field element, not a number.
+type Polynomial{T} <: Number
   coefficients::Array{T}
 
   function Polynomial(c::Array)
@@ -40,6 +41,14 @@ type Polynomial{T}
     new(a)
   end
 end
+
+# convert{T<:Number}(::Type{Polynomial}, x::T) = Polynomial(x)
+# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::S) = Polynomial(convert(T, x))
+# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
+
+# promote_rule{T<:Number}(::Type{Polynomial}, ::Type{T}) = Polynomial
+# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{S}) = Polynomial{promote_type(T,S)}
+# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
 
 function Polynomial{T}(c::Array{T})
   return Polynomial{T}([c])

@@ -3,8 +3,12 @@ module ECDSA
 using Crypto.Integers
 using Crypto.EllipticCurves
 
-a = makeModular(3, 1061)
-println(a)
+a = makeModular(324, 3851)
+b = makeModular(1287, 3851)
+insecureCurve = Curve(a, b)
+x = makeModular(920, 3851)
+y = makeModular(303, 3851)
+basePoint = ConcretePoint(x, y, insecureCurve)
 
 # macro c(ret_type, func, arg_types, lib)
 #   local args_in = Any[ symbol(string('a',x)) for x in 1:length(arg_types.args) ]
@@ -13,10 +17,6 @@ println(a)
 #     $(esc(func))($(args_in...)) = ccall( ($(string(func)), $(Expr(:quote, lib)) ), $ret_type, $arg_types, $(args_in...) )
 #   end
 # end
-
-
-# include("EllipticCurves.jl")
-# include("FiniteFields.jl")
 
 # function sendDH(privateKey, generator, sendFunction)
 #   return sendFunction(privateKey * generator)
@@ -36,7 +36,7 @@ println(a)
 # end
 
 # function sign(message, basePoint, basePointOrder, secretKey)
-#   modR = FiniteFields.FiniteField(basePointOrder, 1)
+#   modR = FiniteField(basePointOrder, 1)
 #   oneTimeSecret = generate(length(bin(basePointOrder)) - 1)
 #   auxiliaryPoint = oneTimeSecret * basePoint
 #   signature = inverse(modR(oneTimeSecret)) *
@@ -45,7 +45,7 @@ println(a)
 # end
 
 # function authenticate(signedMessage, basePoint, basePointOrder, publicKey)
-#   modR = FiniteFields.FiniteField(basePointOrder, 1)
+#   modR = FiniteField(basePointOrder, 1)
 #   (message, auxiliary, signature) = signedMessage
 
 #   sigInverse = inverse(modR(signature)) # sig can be an int or a modR already
@@ -56,12 +56,12 @@ println(a)
 # end
  
 # # y^2 = x^3 + 3x + 181
-# a = FiniteFields.makeModular(3, 1061)
-# b = FiniteFields.makeModular(181, 1061)
-# curve = EllipticCurves.Curve(a, b)
-# x = FiniteFields.makeModular(2, 1061)
-# y = FiniteFields.makeModular(81, 1061)
-# basePoint = EllipticCurves.ConcretePoint(x, y, curve)
+# a = makeModular(3, 1061)
+# b = makeModular(181, 1061)
+# curve = Curve(a, b)
+# x = makeModular(2, 1061)
+# y = makeModular(81, 1061)
+# basePoint = ConcretePoint(x, y, curve)
 # basePointOrder = 349
 # secretKey = generate(8)
 # publicKey = secretKey * basePoint
@@ -69,18 +69,11 @@ println(a)
 # message = 123
 # # signedMessage = sign(message, basePoint, basePointOrder, secretKey)
 
-# modR = FiniteFields.FiniteField(basePointOrder, 1)
+# modR = FiniteField(basePointOrder, 1)
 #   # oneTimeSecret = generate(length(bin(basePointOrder)) - 1)
 #   # auxiliaryPoint = oneTimeSecret * basePoint
 #   # signature = inverse(modR(oneTimeSecret)) *
 #          # (modR(message) + modR(secretKey) * modR(auxiliaryPoint.x))
-
-# # a = FiniteFields.makeModular(324,3851)
-# # b = FiniteFields.makeModular(1287,3851)
-# # insecureCurve = EllipticCurves.Curve(a,b)
-# # x = FiniteFields.makeModular(920,3851)
-# # y = FiniteFields.makeModular(303,3851)
-# # basePoint = EllipticCurves.ConcretePoint(x,y,insecureCurve)
 
 # # aliceSecretKey = generateKey(8)
 # # bobSecretKey = generateKey(8)

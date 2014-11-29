@@ -6,15 +6,12 @@ module FiniteFields
 ##
 ##############################################################################
 
-# export IntegerMod, 
-#        makeModular, 
-#        Polynomial, 
-#        extendedEuclideanAlgorithm, 
-#        gcd, 
-#        isIrreducible, 
-#        FiniteField, 
-#        FiniteFieldElement, 
-#        inverse 
+export extendedEuclideanAlgorithm, 
+       gcd, 
+       isIrreducible, 
+       FiniteField, 
+       FiniteFieldElement, 
+       inverse 
 
 using Crypto
 using Crypto.Integers
@@ -32,14 +29,6 @@ import Base.show,
        Base.zero,
        Base.zeros
 
-# convert{T<:Number}(::Type{Polynomial}, x::T) = Polynomial(x)
-# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::S) = Polynomial(convert(T, x))
-# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
-
-# promote_rule{T<:Number}(::Type{Polynomial}, ::Type{T}) = Polynomial
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{S}) = Polynomial{promote_type(T,S)}
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
-
 type FiniteField{P,M}
   polynomialModulus::Polynomial{IntegerMod{P}}
   
@@ -53,30 +42,30 @@ type FiniteField{P,M}
   end
 end
 
-# function FiniteField(p::Integer, m::Integer)
-#   return FiniteField{p,m}()
-# end
+function FiniteField(p::Integer, m::Integer)
+  return FiniteField{p,m}()
+end
 
-# type FiniteFieldElement{P,M} <: Number
-#   element::Polynomial{IntegerMod{P}}
-#   f::FiniteField{P,M}
-#   function FiniteFieldElement(e::Polynomial{IntegerMod{  P}}, f::FiniteField{P,M})
-#     mod = rem(e,f.polynomialModulus)
-#     new(mod,f)
-#   end
-# end
+type FiniteFieldElement{P,M} <: Number
+  element::Polynomial{IntegerMod{P}}
+  f::FiniteField{P,M}
+  function FiniteFieldElement(e::Polynomial{IntegerMod{  P}}, f::FiniteField{P,M})
+    mod = rem(e,f.polynomialModulus)
+    new(mod,f)
+  end
+end
 
-# function FiniteFieldElement{P,M}(e::FiniteFieldElement{P,M}, f::FiniteField{P,M})
-#   FiniteFieldElement{P,M}(e.element,f)
-# end
+function FiniteFieldElement{P,M}(e::FiniteFieldElement{P,M}, f::FiniteField{P,M})
+  FiniteFieldElement{P,M}(e.element,f)
+end
 
-# function FiniteFieldElement{P,M}(i::IntegerMod{P}, f::FiniteField{P,M})
-#   FiniteFieldElement{P,M}(Polynomial(i),f)
-# end
+function FiniteFieldElement{P,M}(i::IntegerMod{P}, f::FiniteField{P,M})
+  FiniteFieldElement{P,M}(Polynomial(i),f)
+end
 
-# function FiniteFieldElement{P,M}(i::Int64, f::FiniteField{P,M})
-#   FiniteFieldElement{P,M}(Polynomial(makeModular(i,P)),f)
-# end
+function FiniteFieldElement{P,M}(i::Int64, f::FiniteField{P,M})
+  FiniteFieldElement{P,M}(Polynomial(makeModular(i,P)),f)
+end
 
 ### Functions ###
 
@@ -144,72 +133,72 @@ end
   
 ### Operators on FiniteField and FiniteFieldElement ###
 
-# function show{P,M}(io::IO, f::FiniteField{P,M})
-#   print(io, string("F_{",P,"^",M,"}"))
-# end
+function show{P,M}(io::IO, f::FiniteField{P,M})
+  print(io, string("F_{",P,"^",M,"}"))
+end
 
-# function =={P,M}(f1::FiniteField{P,M}, f2::FiniteField{P,M})
-#   return f1.polynomialModulus == f2.polynomialModulus
-# end
+function =={P,M}(f1::FiniteField{P,M}, f2::FiniteField{P,M})
+  return f1.polynomialModulus == f2.polynomialModulus
+end
 
-# function show(io::IO, e::FiniteFieldElement)
-#   print(io, e.element, " \u2208 ", e.f)
-# end
+function show(io::IO, e::FiniteFieldElement)
+  print(io, e.element, " \u2208 ", e.f)
+end
 
-# function =={P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   return e1.element == e2.element && e1.f == e2.f
-# end
+function =={P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  return e1.element == e2.element && e1.f == e2.f
+end
 
-# function +{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   @assert e1.f == e2.f
-#   return FiniteFieldElement{P,M}(e1.element+e2.element,e1.f)
-# end
+function +{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  @assert e1.f == e2.f
+  return FiniteFieldElement{P,M}(e1.element+e2.element,e1.f)
+end
 
-# function -{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   @assert e1.f == e2.f
-#   return FiniteFieldElement{P,M}(e1.element-e2.element,e1.f)
-# end
+function -{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  @assert e1.f == e2.f
+  return FiniteFieldElement{P,M}(e1.element-e2.element,e1.f)
+end
 
-# function *{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   @assert e1.f == e2.f
-#   return FiniteFieldElement{P,M}(e1.element*e2.element,e1.f)
-# end
+function *{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  @assert e1.f == e2.f
+  return FiniteFieldElement{P,M}(e1.element*e2.element,e1.f)
+end
 
-# function divrem{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   @assert e1.f == e2.f
-#   q,r = divrem(e1.element,e2.element)
-#   return (FiniteFieldElement{P,M}(q,e1.f), FiniteFieldElement{P,M}(r,e1.f)) 
-# end
+function divrem{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  @assert e1.f == e2.f
+  q,r = divrem(e1.element,e2.element)
+  return (FiniteFieldElement{P,M}(q,e1.f), FiniteFieldElement{P,M}(r,e1.f)) 
+end
 
-# function div{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   q,_ = divrem(e1,e2)
-#   return q
-# end
+function div{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  q,_ = divrem(e1,e2)
+  return q
+end
 
-# function rem{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
-#   q,r = divrem(e1,e2)
-#   return r
-# end
+function rem{P,M}(e1::FiniteFieldElement{P,M}, e2::FiniteFieldElement{P,M})
+  q,r = divrem(e1,e2)
+  return r
+end
 
-# function -{P,M}(e::FiniteFieldElement{P,M})
-#   return FiniteFieldElement{P,M}(-e.element,e1.f)
-# end
+function -{P,M}(e::FiniteFieldElement{P,M})
+  return FiniteFieldElement{P,M}(-e.element,e1.f)
+end
 
-# function abs{P,M}(e::FiniteFieldElement{P,M})
-#   return abs(e.element)
-# end
+function abs{P,M}(e::FiniteFieldElement{P,M})
+  return abs(e.element)
+end
 
-# function ^{P,M}(e::FiniteFieldElement{P,M}, n::Integer)
-#   return FiniteFieldElement{P,M}(e.element^n, e.f)
-# end
+function ^{P,M}(e::FiniteFieldElement{P,M}, n::Integer)
+  return FiniteFieldElement{P,M}(e.element^n, e.f)
+end
 
-# function inverse{P,M}(e::FiniteFieldElement{P,M})
-#   if e == FiniteFieldElement{P,M}(Polynomial([makeModular(0,P)]),e.f)
-#     error("Divide by zero")
-#   end
+function inverse{P,M}(e::FiniteFieldElement{P,M})
+  if e == FiniteFieldElement{P,M}(Polynomial([makeModular(0,P)]),e.f)
+    error("Divide by zero")
+  end
   
-#   x,y,d = extendedEuclideanAlgorithm(e.element, e.f.polynomialModulus)
-#   return FiniteFieldElement{P,M}(x, e.f) * FiniteFieldElement{P,M}(Polynomial([inverse(d.coefficients[1])]), e.f)
-# end
+  x,y,d = extendedEuclideanAlgorithm(e.element, e.f.polynomialModulus)
+  return FiniteFieldElement{P,M}(x, e.f) * FiniteFieldElement{P,M}(Polynomial([inverse(d.coefficients[1])]), e.f)
+end
 
 end # method FiniteFields

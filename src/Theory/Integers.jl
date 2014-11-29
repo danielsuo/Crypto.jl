@@ -86,13 +86,21 @@ function *{P}(a::IntegerMod{P}, b::IntegerMod{P})
   return IntegerMod{P}(a.n * b.n)
 end
 
-# function *{P}(a::IntegerMod{P}, b::Integer)
-#   return IntegerMod{P}(a.n * b)
-# end
+function *{P}(a::IntegerMod{P}, b::Bool)
+  return
+end
 
-# function *{P}(a::Integer, b::IntegerMod{P})
-#   return IntegerMod{P}(a * b.n)
-# end
+function *{P}(a::Bool, b::IntegerMod{P})
+  return
+end
+
+function *{P}(a::IntegerMod{P}, b::Integer)
+  return IntegerMod{P}(a.n * b)
+end
+
+function *{P}(a::Integer, b::IntegerMod{P})
+  return IntegerMod{P}(a * b.n)
+end
 
 function zero{P}(a::IntegerMod{P})
   return IntegerMod{P}(0)

@@ -22,7 +22,7 @@ immutable Curve
   discriminant
 
   function Curve(a::Number, b::Number)
-    d = -16 * (4 * a*a*a + 27 * b * b)
+    d = -16 * (4 * a * a * a + 27 * b * b)
     if d == 0
       error("Curve is singular.")
     end
