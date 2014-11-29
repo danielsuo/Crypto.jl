@@ -24,7 +24,9 @@ import Base.show,
      Base.promote, 
      Base.abs,
      Base.div,
-     Base.rem
+     Base.rem,
+     Base.zero,
+     Base.zeros
 
 ##############################################################################
 ##
@@ -46,6 +48,7 @@ function makeModular(n::Integer, p::Integer)
 end
 
 convert{P}(::Type{IntegerMod{P}}, n::Integer) = IntegerMod{P}(n)
+convert{P}(::Type{IntegerMod{P}}, a::Array) = [IntegerMod{P}(n) for n in a]
 
 promote_rule{P}(::Type{IntegerMod{P}}, ::Type{Integer}) = IntegerMod{P}
 
@@ -66,43 +69,59 @@ function =={P}(a::Integer, b::IntegerMod{P})
 end
 
 function +{P}(a::IntegerMod{P}, b::IntegerMod{P})
-    return IntegerMod{P}(a.n + b.n)
+  return IntegerMod{P}(a.n + b.n)
 end
 
 function +{P}(a::IntegerMod{P}, b::Integer)
-    return IntegerMod{P}(a.n + b)
+  return IntegerMod{P}(a.n + b)
 end
 
 function +{P}(a::Integer, b::IntegerMod{P})
-    return IntegerMod{P}(a + b.n)
+  return IntegerMod{P}(a + b.n)
 end
 
 function -{P}(a::IntegerMod{P})
-    return IntegerMod{P}(-a.n)
+  return IntegerMod{P}(-a.n)
 end
 
 function -{P}(a::IntegerMod{P}, b::IntegerMod{P})
-    return IntegerMod{P}(a.n - b.n)
+  return IntegerMod{P}(a.n - b.n)
 end
 
 function -{P}(a::IntegerMod{P}, b::Integer)
-    return IntegerMod{P}(a.n - b)
+  return IntegerMod{P}(a.n - b)
 end
 
 function -{P}(a::IntegerMod{P}, b::IntegerMod{P})
-    return return IntegerMod{P}(a - b.n)
+  return return IntegerMod{P}(a - b.n)
 end
 
 function *{P}(a::IntegerMod{P}, b::IntegerMod{P})
-    return IntegerMod{P}(a.n * b.n)
+  return IntegerMod{P}(a.n * b.n)
 end
 
 function *{P}(a::IntegerMod{P}, b::Integer)
-    return IntegerMod{P}(a.n * b)
+  return IntegerMod{P}(a.n * b)
 end
 
 function *{P}(a::Integer, b::IntegerMod{P})
-    return IntegerMod{P}(a * b.n)
+  return IntegerMod{P}(a * b.n)
+end
+
+function zero{P}(a::IntegerMod{P})
+  return IntegerMod{P}(0)
+end
+
+function zero{P}(a::Type{IntegerMod{P}})
+  return IntegerMod{P}(0)
+end
+
+function zeros{P}(T::Type{IntegerMod{P}}, n = 0)
+  result = Array(IntegerMod{P}, n)
+  for i in 1:n
+    result[i] = 0
+  end
+  return result
 end
 
 function divrem{P}(a::IntegerMod{P}, b::IntegerMod{P})
@@ -132,10 +151,10 @@ end
 type Polynomial{T}
   coefficients::Array{T}
 
-  function Polynomial(coefficients::Array)
-    i = length(coefficients)
+  function Polynomial(c::Array)
+    i = length(c)
     while i > 0
-      if coefficients[i] != 0
+      if c[i] != 0
         break
       end
       i -= 1
@@ -143,16 +162,24 @@ type Polynomial{T}
 
     a = Array(T, i)
     for j in 1:i
-      a[j] = coefficients[j]
+      a[j] = c[j]
     end
 
     new(a)
   end
 end
 
-function Polynomial(c::Array)
+function Polynomial{T}(c::Array{T})
   return Polynomial{T}([c])
-end 
+end
+
+function zero{T}(p::Polynomial{T})
+  return Polynomial{T}([])
+end
+
+function zero{T}(a::Type{Polynomial{T}})
+  return Polynomial{T}([])
+end
 
 function isZero(p::Polynomial)
   return p.coefficients == []
@@ -174,7 +201,7 @@ function leadingCoefficient(p::Polynomial)
   return p.coefficients[length(p.coefficients)]
 end
 
-function show{T <: Number}(io::IO, p::Polynomial{T})
+function show(io::IO, p::Polynomial)
   if isZero(p)
     print(io, "0")
   else
@@ -189,19 +216,19 @@ function show{T <: Number}(io::IO, p::Polynomial{T})
   end
 end
 
-function =={T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function ==(a::Polynomial, b::Polynomial)
   length(a) == length(b) && (isZero(a ) || !(false in [a.coefficients[i] == b.coefficients[i] for i in 1:length(a)]))
 end
 
-function -{T <: Number}(p::Polynomial{T})
-  return Polynomial{T}([-i for i in p.coefficients])
+function -(p::Polynomial)
+  return Polynomial([-i for i in p.coefficients])
 end
 
-function -{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function -(a::Polynomial, b::Polynomial)
   return a+(-b)
 end
 
-function +{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function +{T}(a::Polynomial{T}, b::Polynomial{T})
   newcoefficients = zeros(T, max(length(a), length(b)))
   i = 1
   while i <= min(length(a), length(b))
@@ -219,21 +246,21 @@ function +{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
   return Polynomial{T}(newcoefficients)
 end
 
-function *{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function *{T}(a::Polynomial{T}, b::Polynomial{T})
   if isZero(a) || isZero(b)
     return Polynomial{T}(Array(T, 0))
   else
     newcoefficients = zeros(T, length(a) + length(b) - 1)
     for i in 0:length(a)-1
       for j in 0:length(b)-1
-        newcoefficients[i+j+1] += a.coefficients[i+1]*b.coefficients[j+1]
+        newcoefficients[i + j + 1] += a.coefficients[i + 1] * b.coefficients[j + 1]
       end
     end
     return Polynomial{T}(newcoefficients)
   end
 end
 
-function divrem{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function divrem{T}(a::Polynomial{T}, b::Polynomial{T})
   quotient = Polynomial{T}(Array(T, 0))
   remainder = a
   divisorDeg = degree(b)
@@ -242,7 +269,7 @@ function divrem{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
   while degree(remainder) >= divisorDeg
     monomialExponent = degree(remainder) - divisorDeg
     monomialZeros = zeros(T, monomialExponent)
-    monomialDivisor = Polynomial{T}([monomialZeros,[convert(T,leadingCoefficient(remainder)/divisorLC)]] )
+    monomialDivisor = Polynomial{T}([monomialZeros, [convert(T, leadingCoefficient(remainder)/divisorLC)]])
     
     quotient += monomialDivisor
     remainder -= (monomialDivisor*b)
@@ -251,36 +278,31 @@ function divrem{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
   return (quotient, remainder)
 end
 
-function rem{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function rem{T}(a::Polynomial{T}, b::Polynomial{T})
   q,r = divrem(a,b)
   return r
 end
 
-function /{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
+function /{T}(a::Polynomial{T}, b::Polynomial{T})
   q,r = divrem(a,b)
   return q
 end
 
-function div{T <: Number}(a::Polynomial{T}, b::Polynomial{T})
-  q,r = divrem(a,b)
-  return q
-end
-
-function ^{T <: Number}(a::Polynomial{T}, n::Integer)
-  ret = Polynomial(convert(T,1))
+function ^{T}(a::Polynomial{T}, n::Integer)
+  ret = Polynomial{T}([1])
   for i in 1:n
     ret = ret*a
   end
   return ret
 end
 
-# convert{T<:Number}(::Type{Polynomial{T}}, x::T) = Polynomial(x)
-# convert{T<:Number, S<:Number}(::Type{Polynomial{T}}, x::S) = Polynomial(convert(T, x))
-# convert{T<:Number, S<:Number}(::Type{Polynomial{T}}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
+# convert{T<:Number}(::Type{Polynomial}, x::T) = Polynomial(x)
+# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::S) = Polynomial(convert(T, x))
+# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
 
-# promote_rule{T<:Number}(::Type{Polynomial{T}}, ::Type{T}) = Polynomial{T}
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial{T}}, ::Type{S}) = Polynomial{promote_type(T,S)}
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial{T}}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
+# promote_rule{T<:Number}(::Type{Polynomial}, ::Type{T}) = Polynomial
+# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{S}) = Polynomial{promote_type(T,S)}
+# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
 
 # type FiniteField{P,M}
 #   polynomialModulus::Polynomial{IntegerMod{P}}
