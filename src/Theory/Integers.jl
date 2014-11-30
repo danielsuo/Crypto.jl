@@ -1,6 +1,7 @@
 module Integers
 
-export IntegerMod, makeModular
+export IntegerMod, makeModular, extendedEuclideanAlgorithm, 
+       gcd
 
 ##############################################################################
 ##
@@ -24,6 +25,9 @@ type IntegerMod{P} <: Number
     n::Integer
     p::Integer
 
+    function IntegerMod()
+      new(0, P)
+    end
     function IntegerMod(N::Integer)
         new(mod(N,P), P)
     end
@@ -134,6 +138,40 @@ end
 function inverse{P}(a::IntegerMod{P})
     x, y, d = extendedEuclideanAlgorithm(a.n, P)
     return IntegerMod{P}(x)
+end
+
+function gcd(a, b)
+  if abs(b) > abs(a)
+    return gcd(b, a)
+  end
+  
+  while abs(b) > 0
+    _, r = divrem(a,b)
+    a, b = b, r
+  end
+  
+  return a
+end
+
+function extendedEuclideanAlgorithm{T<:Number}(a::T, b::T)
+    if abs(b) > abs(a)
+        x,y,d = extendedEuclideanAlgorithm(b,a)
+        return (y,x,d)
+    end
+    
+    if abs(b) == 0
+        return (1, 0, a)
+    end
+    
+    x1, x2, y1, y2 = convert(T,0), convert(T,1), convert(T,1), convert(T,0) 
+    while abs(b) > 0
+        q, r = divrem(a, b)
+        x = x2 - q*x1
+        y = y2 - q*y1
+        a, b, x2, x1, y2, y1 = b, r, x1, x, y1, y
+    end
+    
+    return (x2, y2, a)
 end
 
 end # module Integer

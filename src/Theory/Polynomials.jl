@@ -1,6 +1,6 @@
 module Polynomials
 
-export Polynomial
+export Polynomial, degree
 
 ##############################################################################
 ##
@@ -24,6 +24,10 @@ import Base.show,
 type Polynomial{T} <: Number
   coefficients::Array{T}
 
+  function Polynomial()
+    return new([0])
+  end
+
   function Polynomial(c::Array)
     i = length(c)
     while i > 0
@@ -42,13 +46,13 @@ type Polynomial{T} <: Number
   end
 end
 
-# convert{T<:Number}(::Type{Polynomial}, x::T) = Polynomial(x)
-# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::S) = Polynomial(convert(T, x))
-# convert{T<:Number, S<:Number}(::Type{Polynomial}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
+convert{T<:Number}(::Type{Polynomial{T}}, x::T) = Polynomial(x)
+convert{T<:Number, S<:Number}(::Type{Polynomial{T}}, x::S) = Polynomial(convert(T, x))
+convert{T<:Number, S<:Number}(::Type{Polynomial{T}}, x::Polynomial{S}) = Polynomial([convert(T,y) for y in x.coefficients])
 
-# promote_rule{T<:Number}(::Type{Polynomial}, ::Type{T}) = Polynomial
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{S}) = Polynomial{promote_type(T,S)}
-# promote_rule{T<:Number, S<:Number}(::Type{Polynomial}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
+promote_rule{T<:Number}(::Type{Polynomial{T}}, ::Type{T}) = Polynomial
+promote_rule{T<:Number, S<:Number}(::Type{Polynomial{T}}, ::Type{S}) = Polynomial{promote_type(T,S)}
+promote_rule{T<:Number, S<:Number}(::Type{Polynomial{T}}, ::Type{Polynomial{S}}) = Polynomial{promote_type(T,S)}
 
 function Polynomial{T}(c::Array{T})
   return Polynomial{T}([c])
@@ -86,14 +90,12 @@ function show(io::IO, p::Polynomial)
   if isZero(p)
     print(io, "0")
   else
-    i = length(p)
-    while i > 1
-      if p.coefficients[i] != 0
-        print(io, string(p.coefficients[i], "x^", i-1, " + "))
-      end
-      i -= 1
-    end
     print(io, string(p.coefficients[1]))
+    for i in 2:length(p)
+      if p.coefficients[i] != 0
+        print(io, string(" + ", p.coefficients[i], "x^", i - 1))
+      end
+    end
   end
 end
 

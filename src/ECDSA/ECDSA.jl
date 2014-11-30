@@ -2,6 +2,14 @@ module ECDSA
 
 using Crypto.Integers
 using Crypto.EllipticCurves
+using Crypto.FiniteFields
+using Crypto.Polynomials
+
+# F = FiniteField{3851, 1}
+# a = F(324)
+# b = F(1287)
+
+# curve = Curve(F(324), F(1287))
 
 a = makeModular(324, 3851)
 b = makeModular(1287, 3851)
