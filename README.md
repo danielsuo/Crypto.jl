@@ -8,21 +8,26 @@ A library that wraps OpenSSL (libcrypto), but also has pure Julia implementation
 
 # To do
 - Implement ECDSA signing / authentication
-- Test ECDSA and subtypes
 - Add libssl and libcrypto bindings
-- Test libssl and libcrypto
-- Clean up implementations (promote, convert, macro +, -, *, /)
-- Add documentation (/doc) and reorganize
-- Add examples (/example)
+- Test and examples
+  - libssl and libcrypto
+  - EDCSA
+- Documentation
+- Clean up code
+  - Methods e.g., promote, convert, macro +, -, *, /
+  - Fix RIPEMD
 - Update README
   - Purpose
   - Audience
   - Use cases
-  - Contributing (PR, suggestions, questions, )
+  - Contributing (PR, issues, suggestions, questions, )
   - Contact
-- Requirements (e.g., Julia in REQUIRE?) and dependencies (libcrypto)?
+  - Thanks / Credit
+- Dependencies (libcrypto)?
 - Update tagline text
-- Publish to Julia packages
+- Add versioning
+- Package
+- Publish to Julia package repo
 
 # Status
 - ~~RIPEMD-160 [ref](https://github.com/bitcoin/bitcoin/blob/master/src/crypto/ripemd160.cpp)~~
