@@ -18,6 +18,8 @@ x = makeModular(920, 3851)
 y = makeModular(303, 3851)
 basePoint = ConcretePoint(x, y, insecureCurve)
 
+# http://jeremykun.com/2014/04/14/sending-and-authenticating-messages-with-elliptic-curves/
+
 # macro c(ret_type, func, arg_types, lib)
 #   local args_in = Any[ symbol(string('a',x)) for x in 1:length(arg_types.args) ]
 

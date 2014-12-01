@@ -155,7 +155,7 @@ end
 
 function extendedEuclideanAlgorithm{T<:Number}(a::T, b::T)
     if abs(b) > abs(a)
-        x,y,d = extendedEuclideanAlgorithm(b,a)
+        x, y, d = extendedEuclideanAlgorithm(b,a)
         return (y,x,d)
     end
     
@@ -163,7 +163,7 @@ function extendedEuclideanAlgorithm{T<:Number}(a::T, b::T)
         return (1, 0, a)
     end
     
-    x1, x2, y1, y2 = convert(T,0), convert(T,1), convert(T,1), convert(T,0) 
+    x1, x2, y1, y2 = convert(T, 0), convert(T, 1), convert(T, 1), convert(T, 0) 
     while abs(b) > 0
         q, r = divrem(a, b)
         x = x2 - q*x1

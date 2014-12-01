@@ -28,7 +28,7 @@ import Base.show,
        Base.zeros
 
 # TODO: Should make another type, not Number
-type FiniteField{P, M} <: Number
+type FiniteField{P, M}
   polynomial::Polynomial{IntegerMod{P}}
   polynomialModulus::Polynomial{IntegerMod{P}}
   
@@ -53,6 +53,9 @@ end
 function FiniteField(p::Integer, m::Integer)
   return FiniteField{p, m}
 end
+
+# convert{P, M}(::Type{FiniteField{P, M}}, n::Number) = FiniteField{P, M}(n)
+# promote_rule{P, M}(::Type{FiniteField{P, M}}, ::Type{Number} ) = FiniteField{P, M}
 
 ### Functions ###
 
@@ -82,8 +85,9 @@ function generateIrreducibleModularPolynomial(p::Integer, m::Integer)
   while true
     firstRand::Array{Zp} = [Zp(rand(0:modulus - 1)) for i in 1:degree]
     append!(firstRand, [Zp(1)])
-    println(firstRand)
-    println(degree)
+
+
+
     p = Polynomial{Zp}(firstRand)
     if degree <= 1 || isIrreducible(p)
       return p
@@ -101,12 +105,36 @@ function +{P, M}(a::FiniteField{P, M}, b::FiniteField{P, M})
   return FiniteField{P, M}(a.polynomial + b.polynomial)
 end
 
+function +{P, M}(a::FiniteField{P, M}, b::Number)
+  return FiniteField{P, M}(a.polynomial + Polynomial{IntegerMod{P}}(b))
+end
+
+function +{P, M}(a::Number, b::FiniteField{P, M})
+  return FiniteField{P, M}(Polynomial{IntegerMod{P}(a)} + b.polynomial)
+end
+
 function -{P, M}(a::FiniteField{P, M}, b::FiniteField{P, M})
   return FiniteField{P, M}(a.polynomial - b.polynomial)
 end
 
+function -{P, M}(a::FiniteField{P, M}, b::Number)
+  return FiniteField{P, M}(a.polynomial - Polynomial{IntegerMod{P}}(b))
+end
+
+function -{P, M}(a::Number, b::FiniteField{P, M})
+  return FiniteField{P, M}(Polynomial{IntegerMod{P}(a)} - b.polynomial)
+end
+
 function *{P, M}(a::FiniteField{P, M}, b::FiniteField{P, M})
   return FiniteField{P, M}(a.polynomial * b.polynomial)
+end
+
+function *{P, M}(a::FiniteField{P, M}, b::Number)
+  return FiniteField{P, M}(a.polynomial * Polynomial{IntegerMod{P}}(b))
+end
+
+function *{P, M}(a::Number, b::FiniteField{P, M})
+  return FiniteField{P, M}(Polynomial{IntegerMod{P}(a)} * b.polynomial)
 end
 
 function =={P, M}(a::FiniteField{P, M}, b::FiniteField{P, M})
