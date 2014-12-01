@@ -4,15 +4,24 @@ Crypto.jl
 [![Build Status](https://travis-ci.org/danielsuo/Crypto.jl.svg?branch=master)](https://travis-ci.org/danielsuo/Crypto.jl)
 [![Coverage Status](https://coveralls.io/repos/danielsuo/Crypto.jl/badge.png)](https://coveralls.io/r/danielsuo/Crypto.jl)
 
-A library that wraps OpenSSL, but also has pure Julia implementations for reference (not recommended)
+A library that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference (not recommended)
 
 # To do
-- Reimplement finite fields
 - Implement ECDSA signing / authentication
 - Test ECDSA and subtypes
 - Add libssl and libcrypto bindings
 - Test libssl and libcrypto
-- Add documentation and reorganize
+- Clean up implementations (promote, convert, macro +, -, *, /)
+- Add documentation (/doc) and reorganize
+- Add examples (/example)
+- Update README
+  - Purpose
+  - Audience
+  - Use cases
+  - Contributing (PR, suggestions, questions, )
+  - Contact
+- Requirements (e.g., Julia in REQUIRE?) and dependencies (libcrypto)?
+- Update tagline text
 - Publish to Julia packages
 
 # Status
