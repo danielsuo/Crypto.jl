@@ -2,3 +2,9 @@
 
 # Keep out code coverage files; they are generated on Travis
 *.cov
+
+# Keep out dep builds
+*.dylib
+edcsa
+*.so
+*.dll
