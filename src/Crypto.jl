@@ -163,10 +163,10 @@ const UNCOMPRESSED_LENGTH = 130
 
 a = zeros(Uint8, 130)
 ccall((:priv2pub, libecdsa), Void, (Ptr{Uint8}, Int, Ptr{Uint8}), "18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725", 4, a)
-a = join([char(x) for x in a])
+a = hex(parseint(BigInt, join([char(x) for x in a]), 16))
 
 hash = ""
 for i in 1:length(a)/2
-  hash = string(hash, char(parseint(a[i:i+1], 16)))
+  hash = string(hash, char(parseint(a[2 * i - 1: 2 * i], 16)))
 end
 end
