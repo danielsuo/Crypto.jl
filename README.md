@@ -7,6 +7,7 @@ Crypto.jl
 A library that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference (not recommended)
 
 # To do
+- Reflect Julia standard packages e.g., only one module / package
 - Implement ECDSA signing / authentication
 - Add libssl and libcrypto bindings
 - Test and examples
