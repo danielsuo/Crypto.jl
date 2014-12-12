@@ -29,7 +29,13 @@ function hexstring(hexes::Array{Uint8,1})
   join([hex(h,2) for h in hexes], "")
 end
 
-function digest(name::String, data::String)
+function digest(name::String, data::String; is_hex=true)
+  if is_hex
+    data = [uint8(parseint(data[2*i-1:2*i], 16)) for i in 1:length(data)/2]
+  else
+    data = data.data
+  end
+
   ctx = ccall((:EVP_MD_CTX_create, "libcrypto"), Ptr{Void}, ())
   try
     # Get the message digest struct
@@ -40,8 +46,7 @@ function digest(name::String, data::String)
     # Add the digest struct to the context
     ccall((:EVP_DigestInit_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}), ctx, md, C_NULL)
     # Update the context with the input data
-    bs = bytestring(data)
-    ccall((:EVP_DigestUpdate, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Uint), ctx, bs, length(bs))
+    ccall((:EVP_DigestUpdate, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Uint), ctx, data, length(data))
     # Figure out the size of the output string for the digest
     size = ccall((:EVP_MD_size, "libcrypto"), Uint, (Ptr{Void},), md)
     uval = Array(Uint8, size)
@@ -73,11 +78,10 @@ function digestinit(name::String)
   end
 end
 
-function digestupdate(ctx,data::String)
+function digestupdate(ctx,data::Array{Uint8})
   try
     # Update the context with the input data
-    bs = bytestring(data)
-    ccall((:EVP_DigestUpdate, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Uint), ctx, bs, length(bs))
+    ccall((:EVP_DigestUpdate, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Uint), ctx, data, length(data))
     ctx
   catch
     ccall((:EVP_MD_CTX_destroy, "libcrypto"), Void, (Ptr{Void},), ctx)
@@ -163,10 +167,12 @@ const UNCOMPRESSED_LENGTH = 130
 
 a = zeros(Uint8, 130)
 ccall((:priv2pub, libecdsa), Void, (Ptr{Uint8}, Int, Ptr{Uint8}), "18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725", 4, a)
-a = hex(parseint(BigInt, join([char(x) for x in a]), 16))
+a = join([char(x) for x in a])
 
 hash = ""
 for i in 1:length(a)/2
-  hash = string(hash, char(parseint(a[2 * i - 1: 2 * i], 16)))
+  append!(hash.data, [char(parseint(a[2*i-1:2*i], 16))])
 end
+
+init()
 end

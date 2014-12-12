@@ -8,6 +8,7 @@ A library that wraps OpenSSL (libcrypto), but also has pure Julia implementation
 
 # To do
 - Reflect Julia standard packages e.g., only one module / package
+- Init, update, finalize
 - Get build process working for deps
 - Implement ECDSA signing / authentication
 - Add libssl and libcrypto bindings

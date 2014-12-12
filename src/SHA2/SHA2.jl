@@ -153,15 +153,10 @@ function transform!(state, block)
   return
 end
 
-function sha256(msg::ASCIIString; is_hex=true)
+function sha256(msg::String; is_hex=true)
 
   if is_hex
-    len = int(length(msg) / 2)
-    result = zeros(Uint8, len)
-    for i = 1:len
-      result[i] = uint8(parseint(msg[2 * i - 1: 2 * i],16))
-    end
-    msg = result
+    msg = [uint8(parseint(msg[2*i-1:2*i], 16)) for i in 1:length(msg)/2]
   else
     # We only want byte array literal (i.e., character array)
     msg = msg.data
