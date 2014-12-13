@@ -12,6 +12,8 @@ WARNING:
 - Continue to add Julia implementations
 - Add more functionality from libcrypto
 
+For more ECDSA curves, see [here](http://git.openssl.org/gitweb/?p=openssl.git;a=blob;f=crypto/objects/obj_mac.h)
+
 # Docs
 - Run init()
 
