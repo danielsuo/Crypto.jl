@@ -8,16 +8,16 @@ const UNCOMPRESSED_LENGTH = 130
 const NID_secp256k1 = 714
 
 # form = POINT_CONVERSION_[UNCOMPRESSED|COMPRESSED]
-function ec_pubkey_create(seckey; curve_id = NID_secp256k1, form = POINT_CONVERSION_UNCOMPRESSED)
-  pubkey_length = form == POINT_CONVERSION_UNCOMPRESSED ? UNCOMPRESSED_LENGTH : COMPRESSED_LENGTH
-  pubkey = zeros(Uint8, pubkey_length)
+function ec_public_key_create(secret_key; curve_id = NID_secp256k1, form = POINT_CONVERSION_UNCOMPRESSED)
+  public_key_length = form == POINT_CONVERSION_UNCOMPRESSED ? UNCOMPRESSED_LENGTH : COMPRESSED_LENGTH
+  public_key = zeros(Uint8, public_key_length)
 
-  ccall((:ec_pubkey_create, "deps/libcryptojl"),          # Function call
+  ccall((:ec_public_key_create, "deps/libcryptojl"),          # Function call
           Void,                                           # Return type Void
           (Ptr{Uint8}, Ptr{Uint8}, Int, Int, Int),        # Argument types
-          seckey, pubkey, pubkey_length, curve_id, form)  # Arguments
+          secret_key, public_key, public_key_length, curve_id, form)  # Arguments
 
-  pubkey = join([char(x) for x in pubkey])
+  public_key = join([char(x) for x in public_key])
 
-  return pubkey
+  return public_key
 end

@@ -10,9 +10,9 @@
 // - input private key and output public key are in hexadecimal
 // - output is null-terminated string
 // form = POINT_CONVERSION_[UNCOMPRESSED|COMPRESSED|HYBRID]
-void ec_pubkey_create(unsigned char *seckey,
-                      unsigned char *pubkey,
-                      int pubkey_length,
+void ec_public_key_create(unsigned char *secret_key,
+                      unsigned char *public_key,
+                      int public_key_length,
                       int curve_id,
                       point_conversion_form_t form
                       )
@@ -21,18 +21,18 @@ void ec_pubkey_create(unsigned char *seckey,
   EC_GROUP *ec_group = EC_GROUP_new_by_curve_name( curve_id );
 
   // convert priv key from hexadecimal to BIGNUM
-  BIGNUM *seckey_bn = BN_new();
-  BN_hex2bn( &seckey_bn, seckey );
+  BIGNUM *secret_key_bn = BN_new();
+  BN_hex2bn( &secret_key_bn, secret_key );
 
   // compute pub key from priv key and group
   EC_POINT *pub = EC_POINT_new( ec_group );
-  EC_POINT_mul( ec_group, pub, seckey_bn, NULL, NULL, NULL );
+  EC_POINT_mul( ec_group, pub, secret_key_bn, NULL, NULL, NULL );
 
   // TODO: change to point2oct
   // convert pub_key from elliptic curve coordinate to hexadecimal string
-  memcpy(pubkey, EC_POINT_point2hex( ec_group, pub, form, NULL ), pubkey_length * sizeof(unsigned char));
+  memcpy(public_key, EC_POINT_point2hex( ec_group, pub, form, NULL ), public_key_length * sizeof(unsigned char));
 
-  EC_GROUP_free( ec_group ); BN_free( seckey_bn ); EC_POINT_free( pub );
+  EC_GROUP_free( ec_group ); BN_free( secret_key_bn ); EC_POINT_free( pub );
 }
 
 // testcase : 
