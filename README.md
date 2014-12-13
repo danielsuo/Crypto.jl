@@ -13,8 +13,11 @@ This package will likely be updated frequently and may break with previous versi
 ```julia
 # Prevent Pkg.update from updating Crypto
 Pkg.pin("Crypto")
+
+# If used in a package's REQUIRE file
+Crypto 0.0.1
 ```
-when installing the package. Installing the package this way might be annoying, but will likely save trouble.
+when installing or requiring the package. Installing the package this way might be annoying, but will likely save trouble.
 
 ## Getting started
 ``` julia
