@@ -2,7 +2,26 @@ module RIPEMD
 
 ##############################################################################
 ##
-## Exported functions and types
+## TODO
+##
+##############################################################################
+
+# - Fix bug for more than one chunk
+# - Refactor RIPEMD-160 and SHA-256 to share boilerplate (E.g., read/write, padding)
+# - Digest -> init, update, finalize
+
+##############################################################################
+##
+## Refereces
+##
+##############################################################################
+
+# - https://maemo.gitorious.org/maemo-pkg/python-crypto/source/8651b0eace17916fe7ba14923dbe4054f255ec2a:lib/Crypto/Hash/RIPEMD160.py
+# - https://github.com/bitcoin/bitcoin/blob/master/src/crypto/ripemd160.cpp
+
+##############################################################################
+##
+## Exports
 ##
 ##############################################################################
 
@@ -138,7 +157,7 @@ function transform!(state, block)
   return
 end
 
-function ripemd160(msg::ASCIIString; is_hex=true)
+function ripemd160(msg::ASCIIString; is_hex=false)
 
   if is_hex
     len = int(length(msg) / 2)

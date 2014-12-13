@@ -2,7 +2,24 @@ module SHA2
 
 ##############################################################################
 ##
-## Exported functions and types
+## TODO
+##
+##############################################################################
+
+# - Refactor RIPEMD-160 and SHA-256 to share boilerplate (E.g., read/write, padding)
+# - Digest -> init, update, finalize
+
+##############################################################################
+##
+## Refereces
+##
+##############################################################################
+
+# - http://en.wikipedia.org/wiki/SHA-2
+
+##############################################################################
+##
+## Exports
 ##
 ##############################################################################
 
@@ -153,7 +170,7 @@ function transform!(state, block)
   return
 end
 
-function sha256(msg::String; is_hex=true)
+function sha256(msg::String; is_hex=false)
 
   if is_hex
     msg = [uint8(parseint(msg[2*i-1:2*i], 16)) for i in 1:length(msg)/2]

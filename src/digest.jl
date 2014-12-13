@@ -7,7 +7,7 @@ function cleanup()
 end
 
 # TODO: convert to c
-function digest(name::String, data::String; is_hex=true)
+function digest(name::String, data::String; is_hex=false)
   if is_hex
     data = [uint8(parseint(data[2*i-1:2*i], 16)) for i in 1:length(data)/2]
   else
