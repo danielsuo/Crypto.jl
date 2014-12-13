@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include <openssl/ec.h>
+#include <openssl/bn.h>
 
 // Include for curve constants
 #include <openssl/obj_mac.h>

@@ -1,5 +1,5 @@
 shared: 
-	gcc -Wno-deprecated-declarations -std=c99 -shared -fPIC -lcrypto digest.c ecdsa.c -o libcryptojl.$(LIBEXT)
+	gcc -Wno-deprecated-declarations -std=c99 -shared -fPIC digest.c ecdsa.c -o libcryptojl.$(LIBEXT) -lcrypto
 
 platform=$(shell uname)
 ifeq ($(platform),Linux)
