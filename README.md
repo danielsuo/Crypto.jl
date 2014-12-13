@@ -67,18 +67,6 @@ Detailed todos are noted in "TODO" sections found in the source code. Major todo
 - Add more OpenSSL Libcrypto functions
 - Implement ECDSA signing / authentication
 
-# To do
-
-- Update README
-  - Purpose
-  - Audience
-  - Use cases
-  - Contributing (PR, issues, suggestions, questions, )
-  - Contact
-- Add versioning / tags
-- Package
-- Publish to Julia package repo
-
 # How to contribute
 Let's figure that out together! Generally, testing and documentation are good. The TODOs list at the top of source files are one place to start. To help others review pull requests, please follow these guidelines:
 
