@@ -1,3 +1,11 @@
+##############################################################################
+##
+## TODO
+##
+##############################################################################
+
+# - Convert to c function. Hard to read so many ccall's.
+
 function init()
   ccall((:OpenSSL_add_all_digests, "libcrypto"), Void, ())
 end
@@ -6,7 +14,6 @@ function cleanup()
   ccall((:EVP_cleanup, "libcrypto"), Void, ())
 end
 
-# TODO: convert to c
 function digest(name::String, data::String; is_hex=false)
   if is_hex
     data = [uint8(parseint(data[2*i-1:2*i], 16)) for i in 1:length(data)/2]
