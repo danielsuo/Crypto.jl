@@ -13,7 +13,7 @@ function ec_public_key_create(secret_key; curve_id = NID_secp256k1, form = UNCOM
   public_key_length = form == UNCOMPRESSED ? UNCOMPRESSED_LENGTH : COMPRESSED_LENGTH
   public_key = zeros(Uint8, public_key_length)
 
-  ccall((:ec_public_key_create, libcryptojl),                         # Function call
+  ccall((:ec_public_key_create, "deps/libcryptojl"),                         # Function call
           Void,                                                       # Return type Void
           (Ptr{Uint8}, Ptr{Uint8}, Int, Int, Int),                    # Argument types
           secret_key, public_key, public_key_length, curve_id, form)  # Arguments
