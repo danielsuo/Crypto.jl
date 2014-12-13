@@ -11,9 +11,10 @@ WARNING: This package experimental and is not ready for production use. The pure
 # Usage
 This package will likely be updated frequently and may break with previous versions. If you use the code, we recommend using
 ```julia
+# Prevent Pkg.update from updating Crypto
 Pkg.pin("Crypto")
 ```
-when installing the package. Installing the package this way will be annoying to update, but will likely save trouble.
+when installing the package. Installing the package this way might be annoying, but will likely save trouble.
 
 ## Getting started
 ``` julia
@@ -29,7 +30,7 @@ Crypto.init()
 # Digests are available for MD2, MD5, SHA, SHA1, SHA224, SHA256, SHA384,
 # SHA512, DSS, DSS1, MDC2, RIPEMD160
 Crypto.digest("SHA256", "test")
-#9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+# 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
 
 # If provided string is hex
 Crypto.digest("SHA256", "12eba", is_hex=true)
@@ -37,7 +38,7 @@ Crypto.digest("SHA256", "12eba", is_hex=true)
 ```
 
 ## Using elliptic curve cryptography
-So far, we can only generate public keys from private keys. We plan to add more functionality.
+So far, the package only generates public keys from private keys. We plan to add more functionality.
 ```julia
 # Generate public key from private key
 secret_key = "18e14a7b6a307f426a94f8114701e7c8e774e7f9a47e2c2035db29a206321725"
@@ -74,8 +75,6 @@ Detailed todos are noted in "TODO" sections found in the source code. Major todo
   - Use cases
   - Contributing (PR, issues, suggestions, questions, )
   - Contact
-- Dependencies (libcrypto)?
-- Update tagline text
 - Add versioning / tags
 - Package
 - Publish to Julia package repo
