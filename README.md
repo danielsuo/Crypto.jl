@@ -77,12 +77,13 @@ Let's figure that out together! Generally, testing and documentation are good. T
 
 - Add a summary of your changes to CHANGELOG.md in the 'Work in progress' section
 - Make sure new code is tested and all tests pass
-  ```
-  # Navigate to package directory
-  julia --code-coverage test/runtests.jl
-  ```
+
+```julia
+# Navigate to package directory
+julia --code-coverage test/runtests.jl
+```
 
 Thank you for your help!
 
 # Thanks
-Shout out to @dirk, @amitmurthy, @j2kun, and @wwilson for OpenSSL, Julia, and theory references.
+Shout out to @dirk, @amitmurthy, @j2kun, @wwilson, and @staticfloat for OpenSSL, Julia, and theory references.
