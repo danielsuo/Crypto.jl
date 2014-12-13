@@ -4,7 +4,6 @@
 *.cov
 
 # Keep out dep builds
-# *.dylib
-# edcsa
-# *.so
-# *.dll
+*.dylib
+*.so
+*.dll

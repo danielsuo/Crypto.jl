@@ -6,6 +6,15 @@ Crypto.jl
 
 A library that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference (not recommended)
 
+WARNING:
+
+- Make cryptographically secure
+- Continue to add Julia implementations
+- Add more functionality from libcrypto
+
+# Docs
+- Run init()
+
 # To do
 - Reflect Julia standard packages e.g., only one module / package
 - Init, update, finalize
@@ -28,7 +37,7 @@ A library that wraps OpenSSL (libcrypto), but also has pure Julia implementation
   - Thanks / Credit
 - Dependencies (libcrypto)?
 - Update tagline text
-- Add versioning
+- Add versioning / tags
 - Package
 - Publish to Julia package repo
 

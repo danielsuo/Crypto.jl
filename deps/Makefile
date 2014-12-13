@@ -1,13 +1,5 @@
-CC=gcc
-CFLAGS=-Wl
-LDFLAGS=
-LINKLIBS=
-
-shared: ecdsa.c
-	$(CC) $(CFLAGS) -std=c99 -shared -fPIC -lcrypto ecdsa.c $(LDFLAGS) $(LINKLIBS) -o libecdsa.$(LIBEXT)
-
-executable: ecdsa.c
-	gcc -lcrypto -std=c99 ecdsa.c -o ecdsa
+shared: 
+	gcc -Wno-deprecated-declarations -std=c99 -shared -fPIC -lcrypto digest.c ecdsa.c -o libcryptojl.$(LIBEXT)
 
 platform=$(shell uname)
 ifeq ($(platform),Linux)
@@ -19,4 +11,4 @@ else
 endif
 
 clean:
-	-rm libecdsa.$(LIBEXT)
+	-rm libcryptojl.$(LIBEXT)

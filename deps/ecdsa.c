@@ -14,9 +14,6 @@ void priv2pub( const unsigned char *priv_hex,
                point_conversion_form_t form,
                unsigned char *ret)
 {
-
-  printf( "%s\n", priv_hex );
-
   // create group
   EC_GROUP *ecgrp = EC_GROUP_new_by_curve_name( NID_secp256k1 );
 
@@ -28,23 +25,11 @@ void priv2pub( const unsigned char *priv_hex,
   EC_POINT *pub = EC_POINT_new( ecgrp );
   EC_POINT_mul( ecgrp, pub, priv_bn, NULL, NULL, NULL );
 
+  // TODO: change to point2oct
   // convert pub_key from elliptic curve coordinate to hexadecimal string
   memcpy(ret, EC_POINT_point2hex( ecgrp, pub, form, NULL ), 130 * sizeof(unsigned char));
 
   EC_GROUP_free( ecgrp ); BN_free( priv_bn ); EC_POINT_free( pub );
-}
-
-int main( int argc, char *argv[] )
-{
-  // get priv key from cmd line and compute put key
-  unsigned char *a = malloc(130 * sizeof(unsigned char));
-  priv2pub( argv[1], POINT_CONVERSION_UNCOMPRESSED, a);
-
-  printf( "%s\n", a );
-
-  free( a );
-
-  return 0;
 }
 
 // testcase : 
