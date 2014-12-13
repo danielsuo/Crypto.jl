@@ -1,6 +1,6 @@
 module Crypto
 
-export init, cleanup, digest, priv2pub
+export init, cleanup, digest, ec_public_key_create
 
 ##############################################################################
 ##
