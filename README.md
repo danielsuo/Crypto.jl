@@ -6,6 +6,8 @@ Crypto.jl
 
 A package that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference. Contributions welcome.
 
+Check out @staticfloat's pure Julia [SHA](https://github.com/staticfloat/SHA.jl) package. We may simply require that package in this one rather than keep separate SHA implementations.
+
 WARNING: This package experimental and is not ready for production use. The pure Julia implementations are not complete. Use at your own risk. 
 
 # Usage
