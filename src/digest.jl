@@ -1,0 +1,43 @@
+function init()
+  ccall((:OpenSSL_add_all_digests, "libcrypto"), Void, ())
+end
+
+function cleanup()
+  ccall((:EVP_cleanup, "libcrypto"), Void, ())
+end
+
+# TODO: convert to c
+function digest(name::String, data::String; is_hex=true)
+  if is_hex
+    data = [uint8(parseint(data[2*i-1:2*i], 16)) for i in 1:length(data)/2]
+  else
+    data = data.data
+  end
+
+  ctx = ccall((:EVP_MD_CTX_create, "libcrypto"), Ptr{Void}, ())
+  try
+    # Get the message digest struct
+    md = ccall((:EVP_get_digestbyname, "libcrypto"), Ptr{Void}, (Ptr{Uint8},), bytestring(name))
+    if(md == C_NULL)
+      error("Unknown message digest $name")
+    end
+
+    # Add the digest struct to the context
+    ccall((:EVP_DigestInit_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}), ctx, md, C_NULL)
+
+    # Update the context with the input data
+    ccall((:EVP_DigestUpdate, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Uint), ctx, data, length(data))
+
+    # Figure out the size of the output string for the digest
+    size = ccall((:EVP_MD_size, "libcrypto"), Uint, (Ptr{Void},), md)
+    uval = Array(Uint8, size)
+
+    # Calculate the digest and store it in the uval array
+    ccall((:EVP_DigestFinal_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Ptr{Uint}), ctx, uval, C_NULL)
+
+    # Convert the uval array to a string of hexes
+    return join([hex(h,2) for h in uval], "")
+  finally
+    ccall((:EVP_MD_CTX_destroy, "libcrypto"), Void, (Ptr{Void},), ctx)
+  end
+end
