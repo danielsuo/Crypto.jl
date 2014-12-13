@@ -4,43 +4,93 @@ Crypto.jl
 [![Build Status](https://travis-ci.org/danielsuo/Crypto.jl.svg?branch=master)](https://travis-ci.org/danielsuo/Crypto.jl)
 [![Coverage Status](https://coveralls.io/repos/danielsuo/Crypto.jl/badge.png)](https://coveralls.io/r/danielsuo/Crypto.jl)
 
-A library that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference (not recommended)
+A package that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference. Contributions welcome.
 
-WARNING:
+WARNING: This package experimental and is not ready for production use. The pure Julia implementations are not complete. Use at your own risk. 
 
-- Make cryptographically secure
-- Continue to add Julia implementations
-- Add more functionality from libcrypto
-- if you use, please lock version
-- Switch default to is_hex=false
+# Usage
+This package will likely be updated frequently and may break with previous versions. If you use the code, we recommend using
+```julia
+Pkg.pin("Crypto")
+```
+when installing the package. Installing the package this way will be annoying to update, but will likely save trouble.
 
-For more ECDSA curves, see [here](http://git.openssl.org/gitweb/?p=openssl.git;a=blob;f=crypto/objects/obj_mac.h)
+## Getting started
+``` julia
+using Crypto
 
-# Docs
-- Run init()
+# Add open OpenSSL algorithms to look-up table
+# Required for using digests
+Crypto.init()
+```
+
+## Creating digests
+```julia
+# Digests are available for MD2, MD5, SHA, SHA1, SHA224, SHA256, SHA384,
+# SHA512, DSS, DSS1, MDC2, RIPEMD160
+Crypto.digest("SHA256", "test")
+#9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+
+# If provided string is hex
+Crypto.digest("SHA256", "12eba", is_hex=true)
+# 0c58bf613f25d049c7355f7e334866bd6ba8b13ab7c06fc79cf607a57116174b
+```
+
+## Using elliptic curve cryptography
+So far, we can only generate public keys from private keys. We plan to add more functionality.
+```julia
+# Generate public key from private key
+secret_key = "18e14a7b6a307f426a94f8114701e7c8e774e7f9a47e2c2035db29a206321725"
+Crypto.ec_public_key_create(secret_key)
+# "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
+
+# Use curve secp256k1 (e.g., for Bitcoin) and generate uncompressed private key
+# For more curves, see https://github.com/openssl/openssl/blob/master/crypto/objects/obj_mac.h
+const NID_secp256k1 = 714
+const COMPRESSED = 2
+Crypto.ec_public_key_create(secret_key, curve_id = NID_secp256k1, form = COMPRESSED)
+# 0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352
+```
+
+## Generating random numbers
+```julia
+# Returns array of 32 Uint8
+Crypto.random(256)
+```
+
+# TODO
+Detailed todos are noted in "TODO" sections found in the source code. Major todos:
+
+- Review for cryptographic security (e.g., CSPRNG, memory cleanup)
+- Add more Julia implementations
+- Add more OpenSSL Libcrypto functions
+- Implement ECDSA signing / authentication
 
 # To do
-- Reflect Julia standard packages e.g., only one module / package
-- Init, update, finalize
-- Get build process working for deps
-- Implement ECDSA signing / authentication
-- Add libssl and libcrypto bindings
-- Test and examples
-  - libssl and libcrypto
-  - EDCSA
-- Documentation
-- Clean up code
-  - Methods e.g., promote, convert, macro +, -, *, /
-  - Fix RIPEMD
+
 - Update README
   - Purpose
   - Audience
   - Use cases
   - Contributing (PR, issues, suggestions, questions, )
   - Contact
-  - Thanks / Credit
 - Dependencies (libcrypto)?
 - Update tagline text
 - Add versioning / tags
 - Package
 - Publish to Julia package repo
+
+# How to contribute
+Let's figure that out together! Generally, testing and documentation are good. The TODOs list at the top of source files are one place to start. To help others review pull requests, please follow these guidelines:
+
+- Add a summary of your changes to CHANGELOG.md in the 'Work in progress' section
+- Make sure new code is tested and all tests pass
+  ```
+  # Navigate to package directory
+  julia --code-coverage test/runtests.jl
+  ```
+
+Thank you for your help!
+
+# Thanks
+Shout out to @dirk, @amitmurthy, @j2kun, and @wwilson for OpenSSL, Julia, and theory references.

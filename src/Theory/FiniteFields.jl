@@ -2,7 +2,16 @@ module FiniteFields
 
 ##############################################################################
 ##
-## Exported functions and types
+## TODO
+##
+##############################################################################
+
+# - Should remove module and rely on package-level module as per convention
+# - Methods e.g., promote, convert, macro +, -, *, /
+
+##############################################################################
+##
+## Exports
 ##
 ##############################################################################
 
@@ -10,6 +19,12 @@ export isIrreducible,
        FiniteField, 
        FiniteFieldElement, 
        inverse
+
+##############################################################################
+##
+## Implementation
+##
+##############################################################################
 
 using Crypto
 using Crypto.Integers
