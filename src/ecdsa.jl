@@ -20,3 +20,12 @@ function ec_public_key_create(secret_key; curve_id = NID_secp256k1, form = UNCOM
 
   return join([hex(x, 2) for x in public_key])
 end
+
+# https://www.openssl.org/docs/crypto/ecdsa.html
+function ec_sign(secret_key; curve_id = NID_secp256k1, form = UNCOMPRESSED)
+
+end
+
+function ec_verify(signature, public_key; curve_id = NID_secp256k1)
+
+end

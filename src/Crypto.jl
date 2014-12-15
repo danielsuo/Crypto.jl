@@ -15,7 +15,7 @@ module Crypto
 ##
 ##############################################################################
 
-export init, cleanup, digest, ec_public_key_create
+export init, cleanup, digest, ec_public_key_create, ec_sign, ec_verify
 
 ##############################################################################
 ##
