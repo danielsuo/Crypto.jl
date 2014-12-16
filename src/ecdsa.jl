@@ -5,27 +5,38 @@ const UNCOMPRESSED = 4
 const COMPRESSED_LENGTH = 33
 const UNCOMPRESSED_LENGTH = 65
 
+# TODO: Assume maximum signature size is 144 bytes (way overkill)
+const SIGNATURE_SIZE = 144
+
 const NID_secp256k1 = 714
 
 # curve_id: https://github.com/openssl/openssl/blob/master/crypto/objects/obj_mac.h
 # form: POINT_CONVERSION_[UNCOMPRESSED|COMPRESSED]
-function ec_public_key_create(secret_key; curve_id = NID_secp256k1, form = UNCOMPRESSED)
-  public_key_length = form == UNCOMPRESSED ? UNCOMPRESSED_LENGTH : COMPRESSED_LENGTH
-  public_key = zeros(Uint8, public_key_length)
+function ec_pub_key(priv_key; curve_id = NID_secp256k1, form = UNCOMPRESSED)
+  pub_key_length = form == UNCOMPRESSED ? UNCOMPRESSED_LENGTH : COMPRESSED_LENGTH
+  pub_key = zeros(Uint8, pub_key_length)
 
-  ccall((:ec_public_key_create, libcryptojl),                         # Function call
-          Void,                                                       # Return type Void
-          (Ptr{Uint8}, Ptr{Uint8}, Int, Int, Int),                    # Argument types
-          secret_key, public_key, public_key_length, curve_id, form)  # Arguments
+  ccall((:ec_pub_key, libcryptojl),               # Function call
+          Void,                                   # Return type Void
+          (Ptr{Uint8}, Ptr{Uint8}, Int, Int),     # Argument types
+          pub_key, priv_key, curve_id, form)      # Arguments
 
-  return join([hex(x, 2) for x in public_key])
+  return join([hex(x, 2) for x in pub_key])
 end
 
 # https://www.openssl.org/docs/crypto/ecdsa.html
-function ec_sign(secret_key; curve_id = NID_secp256k1, form = UNCOMPRESSED)
-
+function ec_sign(hash, priv_key; curve_id = NID_secp256k1)
+  sig = zeros(Uint8, SIGNATURE_SIZE)
+  siglen = ccall((:ec_sign, libcryptojl),
+                  Uint,
+                  (Ptr{Uint8}, Ptr{Uint8}, Int, Ptr{Uint8}, Int),
+                  sig, hash, length(hash), priv_key, curve_id)
+  return sig[1:siglen]
 end
 
-function ec_verify(signature, public_key; curve_id = NID_secp256k1)
-
+function ec_verify(hash, sig, pub_key; curve_id = NID_secp256k1)
+  return true == ccall((:ec_verify, libcryptojl),
+                        Int,
+                        (Ptr{Uint8}, Int, Ptr{Uint8}, Int, Ptr{Uint8}, Int),
+                        hash, length(hash), sig, length(sig), pub_key, curve_id)
 end

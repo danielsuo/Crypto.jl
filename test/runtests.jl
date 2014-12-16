@@ -15,8 +15,19 @@ test = digest("SHA256", "")
 test = digest("RIPEMD160", "") 
 @test test == "9c1185a5c5e9fc54612808977ee8f548b2258d31"
 
-test = ec_public_key_create("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725")
+test = ec_pub_key("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725")
 @test test == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
+
+priv_key = join([hex(x) for x in random(256)])
+pub_key = ec_pub_key(priv_key)
+
+a = "abc".data
+ec_sign(a, priv_key)
+@test ec_verify(a, ec_sign(a, priv_key), pub_key)
+
+a = "abc"
+ec_sign(a, priv_key)
+@test ec_verify(a, ec_sign(a, priv_key), pub_key)
 
 # SHA2 tests
 # Test empty string
