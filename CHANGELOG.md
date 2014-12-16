@@ -1,5 +1,6 @@
 Work in progress
 - [Your entry here]
+- Add Julia pkg repo badge to README
 
 v"0.0.1" (Initial release)
 - OpenSSL bindings are available for

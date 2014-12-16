@@ -3,6 +3,7 @@ Crypto.jl
 
 [![Build Status](https://travis-ci.org/danielsuo/Crypto.jl.svg?branch=master)](https://travis-ci.org/danielsuo/Crypto.jl)
 [![Coverage Status](https://coveralls.io/repos/danielsuo/Crypto.jl/badge.png)](https://coveralls.io/r/danielsuo/Crypto.jl)
+[![Crypto](http://pkg.julialang.org/badges/Crypto_release.svg)](http://pkg.julialang.org/?pkg=Crypto&ver=release)
 
 A package that wraps OpenSSL (libcrypto), but also has pure Julia implementations for reference. Contributions welcome.
 
