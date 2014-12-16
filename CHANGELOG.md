@@ -1,5 +1,6 @@
 Work in progress
 - [Your entry here]
+- Implement ECDSA signing and verifying
 - Add Julia pkg repo badge to README
 
 v"0.0.1" (Initial release)
@@ -10,3 +11,4 @@ v"0.0.1" (Initial release)
 - Initial pure Julia implementations for
   - SHA256
   - RIPEMD160
+  

@@ -7,3 +7,6 @@
 *.dylib
 *.so
 *.dll
+
+# Test executable in deps
+cryptojl
