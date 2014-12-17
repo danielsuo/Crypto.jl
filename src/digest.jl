@@ -46,7 +46,7 @@ function digest(name::String, data::Array{Uint8}; is_hex=false)
     # Calculate the digest and store it in the uval array
     ccall((:EVP_DigestFinal_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Ptr{Uint}), ctx, uval, C_NULL)
 
-    return join([hex(h, 2) for h in uval], "")
+    return uval
   finally
     ccall((:EVP_MD_CTX_destroy, "libcrypto"), Void, (Ptr{Void},), ctx)
   end

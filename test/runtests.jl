@@ -9,13 +9,13 @@ using Base.Test
 
 init()
 
-test = digest("SHA256", "") 
+test = hex_array_to_string(digest("SHA256", ""))
 @test test == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
-test = digest("RIPEMD160", "") 
+test = hex_array_to_string(digest("RIPEMD160", ""))
 @test test == "9c1185a5c5e9fc54612808977ee8f548b2258d31"
 
-test = digest("SHA256", "abcd", is_hex = true)
+test = hex_array_to_string(digest("SHA256", "abcd", is_hex = true))
 @test test == "123d4c7ef2d1600a1b3a0f6addc60a10f05a3495c9409f2ecbf4cc095d000a6b"
 
 @test_throws ErrorException digest("asdf", "abcd")

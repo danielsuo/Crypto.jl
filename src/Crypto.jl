@@ -15,7 +15,8 @@ module Crypto
 ##
 ##############################################################################
 
-export init, cleanup, digest, random, ec_pub_key, ec_sign, ec_verify
+export init, cleanup, digest, random, ec_pub_key, ec_sign, ec_verify,
+       hex_string_to_array, hex_array_to_string
 
 ##############################################################################
 ##
@@ -23,6 +24,7 @@ export init, cleanup, digest, random, ec_pub_key, ec_sign, ec_verify
 ##
 ##############################################################################
 
+include("util.jl")
 include("digest.jl")
 include("ecdsa.jl")
 include("random.jl")
