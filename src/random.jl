@@ -1,7 +1,7 @@
 function random(numbits)
   numbytes = fld(numbits, 8)
   if numbits % 8 != 0
-    warning("The requested number of random bits is not divisible by 8. Rounding to the nearest multiple of 8.")
+    warn("The requested number of random bits is not divisible by 8. Rounding to the nearest multiple of 8.")
     numbytes += 1
   end
 
