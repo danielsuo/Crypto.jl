@@ -11,8 +11,10 @@
 
 // TODO: consider using bytes rather than hex strings
 int ec_keys(EC_KEY *keys,
-            const char *priv_key,
-            const char *pub_key,
+            const unsigned char *priv_key,
+            int priv_key_len,
+            const unsigned char *pub_key,
+            int pub_key_len,
             int curve_id)
 {
   // Error if neither priv_key nor pub_key are set
@@ -26,12 +28,12 @@ int ec_keys(EC_KEY *keys,
   EC_POINT *pub_key_point = EC_POINT_new( ec_group );
 
   if (priv_key != NULL) {
-    BN_hex2bn( &priv_key_bn, priv_key );
+    BN_bin2bn( priv_key, priv_key_len, priv_key_bn);
     EC_KEY_set_private_key( keys, priv_key_bn );
   }
 
   if (pub_key != NULL) {
-    EC_POINT_hex2point( ec_group, pub_key, pub_key_point, NULL );
+    EC_POINT_oct2point( ec_group, pub_key_point, pub_key, pub_key_len, NULL );
   } else {
     EC_POINT_mul( ec_group, pub_key_point, priv_key_bn, NULL, NULL, NULL );
   }
@@ -53,7 +55,8 @@ int ec_keys(EC_KEY *keys,
 // curve_id: https://github.com/openssl/openssl/blob/master/crypto/objects/obj_mac.h
 // form: POINT_CONVERSION_[UNCOMPRESSED|COMPRESSED|HYBRID]
 void ec_pub_key(unsigned char *pub_key,
-                const char *priv_key,
+                const unsigned char *priv_key,
+                int priv_key_len,
                 int curve_id,
                 point_conversion_form_t form
                 )
@@ -61,7 +64,7 @@ void ec_pub_key(unsigned char *pub_key,
   EC_KEY *keys = EC_KEY_new();
 
   // Fill EC_KEY object with group and private/public keys
-  ec_keys( keys, priv_key, NULL, curve_id );
+  ec_keys( keys, priv_key, priv_key_len, NULL, 0, curve_id );
 
   const EC_GROUP *group = EC_KEY_get0_group( keys );
   const EC_POINT *pk_point = EC_KEY_get0_public_key( keys );
@@ -78,37 +81,39 @@ void ec_pub_key(unsigned char *pub_key,
 
 unsigned int ec_sign(unsigned char *sig,
                      const unsigned char *hash,
-                     int hashlen,
-                     const char *priv_key,
+                     int hash_len,
+                     const unsigned char *priv_key,
+                     int priv_key_len,
                      int curve_id
                     )
 {
   EC_KEY *keys = EC_KEY_new();
 
   // Fill EC_KEY object with group and private/public keys
-  ec_keys( keys, priv_key, NULL, curve_id );
+  ec_keys( keys, priv_key, priv_key_len, NULL, 0, curve_id );
 
-  unsigned int *siglen = malloc(sizeof(unsigned int));
-  ECDSA_sign( 0, hash, hashlen, sig, siglen, keys );
+  unsigned int *sig_len = malloc(sizeof(unsigned int));
+  ECDSA_sign( 0, hash, hash_len, sig, sig_len, keys );
 
   EC_KEY_free( keys );
 
-  return *siglen;
+  return *sig_len;
 }
 
 int ec_verify(const unsigned char *hash,
-              int hashlen,
+              int hash_len,
               const unsigned char *sig,
-              int siglen,
-              const char *pub_key,
+              int sig_len,
+              const unsigned char *pub_key,
+              int pub_key_len,
               int curve_id
               )
 {
   EC_KEY *keys = EC_KEY_new();
 
-  ec_keys( keys, NULL, pub_key, curve_id );
+  ec_keys( keys, NULL, 0, pub_key, pub_key_len, curve_id );
 
-  int result = ECDSA_verify( 0, hash, hashlen, sig, siglen, keys );
+  int result = ECDSA_verify( 0, hash, hash_len, sig, sig_len, keys );
 
   EC_KEY_free( keys );
 
@@ -124,21 +129,21 @@ int main( int argc, char **argv )
   // free( pub );
 
   // unsigned char *sig = malloc(72);
-  // int *siglen = malloc(sizeof(int));
+  // int *sig_len = malloc(sizeof(int));
 
   // ec_sign( sig, argv[1], strlen(argv[1]), argv[2], NID_secp256k1 );
 
   // unsigned char *sig = malloc(72 * sizeof(unsigned char));
-  // int siglen = ec_sign( sig, argv[1], strlen(argv[1]), argv[2], NID_secp256k1 );
+  // int sig_len = ec_sign( sig, argv[1], strlen(argv[1]), argv[2], NID_secp256k1 );
 
-  // printf("%d\n", siglen);
+  // printf("%d\n", sig_len);
   // printf("sig: ");
-  // for (int i = 0; i < siglen; i++) {
+  // for (int i = 0; i < sig_len; i++) {
   //   printf("%x", sig[i]);
   // }
   // printf("\n");
 
-  // printf("%d\n", ec_verify(argv[1], strlen(argv[1]), sig, siglen, argv[3], NID_secp256k1));
+  // printf("%d\n", ec_verify(argv[1], strlen(argv[1]), sig, sig_len, argv[3], NID_secp256k1));
 
   return 0;
 }

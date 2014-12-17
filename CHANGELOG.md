@@ -1,7 +1,9 @@
 Work in progress
 - [Your entry here]
 - Implement ECDSA signing and verifying
-- Add additional signatures for the digest function
+- Change input / output of digest and ec functions to Array of Uint8
+- Add additional signatures for the digest and ec functions
+- Add convenience functions to convert to and from hex strings / Array{Uint8}
 - Add Julia pkg repo badge to README
 
 v"0.0.1" (Initial release)

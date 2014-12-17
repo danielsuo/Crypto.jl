@@ -20,12 +20,12 @@ test = hex_array_to_string(digest("SHA256", "abcd", is_hex = true))
 
 @test_throws ErrorException digest("asdf", "abcd")
 
-test = ec_pub_key("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725")
-@test test == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
+test = ec_pub_key(hex_string_to_array("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725"))
+@test hex_array_to_string(test) == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
 
 @test length(random(244)) == 31
 
-priv_key = join([hex(x) for x in random(256)])
+priv_key = random(256)
 pub_key = ec_pub_key(priv_key)
 
 a = "abc".data
