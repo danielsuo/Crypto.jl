@@ -36,6 +36,13 @@ a = "abc"
 ec_sign(a, priv_key)
 @test ec_verify(a, ec_sign(a, priv_key), pub_key)
 
+# Utilities
+# hex_string_to_array: empty string
+@test hex_string_to_array("") == []
+# hex_string_to_array: odd- and even-length strings
+@test hex_string_to_array("adfcef981") == [0x0a, 0xdf, 0xce, 0xf9, 0x81]
+@test hex_string_to_array("aadfcef981") == [0xaa, 0xdf, 0xce, 0xf9, 0x81]
+
 # SHA2 tests
 # Test empty string
 # @test SHA2.sha256("") == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"

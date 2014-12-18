@@ -23,7 +23,9 @@ function convert(::Type{Array{Uint8}}, x::Integer)
   padding = 0
   if typeof(x) != BigInt
     padding = sizeof(x) * 2
+    hex_string = hex(x, padding)
+  else
+    hex_string = hex(x)
   end
-  hex_string = hex(x, padding)
   return hex_string_to_array(hex_string)
 end
