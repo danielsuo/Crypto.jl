@@ -16,7 +16,7 @@ module Crypto
 ##############################################################################
 
 export init, cleanup, digest, random, ec_pub_key, ec_sign, ec_verify,
-       hex_string_to_array, hex_array_to_string
+       hex2oct, oct2hex
 
 export COMPRESSED,
        UNCOMPRESSED,

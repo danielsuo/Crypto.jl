@@ -24,7 +24,7 @@ function digest(name::String, data::String; is_hex=false)
   return digest(name, data)
 end
 
-function digest(name::String, data::Array{Uint8}; is_hex=false)
+function digest(name::String, data::Array{Uint8})
   ctx = ccall((:EVP_MD_CTX_create, "libcrypto"), Ptr{Void}, ())
   try
     # Get the message digest struct

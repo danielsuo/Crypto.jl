@@ -26,7 +26,7 @@ end
 
 # priv_key as hex string
 function ec_pub_key(priv_key::String; curve_id = NID_secp256k1, form = UNCOMPRESSED)
-  ec_pub_key(hex_string_to_array(priv_key), curve_id = curve_id, form = form)
+  ec_pub_key(hex2oct(priv_key), curve_id = curve_id, form = form)
 end
 
 # https://www.openssl.org/docs/crypto/ecdsa.html

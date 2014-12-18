@@ -11,19 +11,19 @@ init()
 
 # TODO: add convert integer to byte array tests, including BigInt
 
-test = hex_array_to_string(digest("SHA256", ""))
+test = oct2hex(digest("SHA256", ""))
 @test test == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
-test = hex_array_to_string(digest("RIPEMD160", ""))
+test = oct2hex(digest("RIPEMD160", ""))
 @test test == "9c1185a5c5e9fc54612808977ee8f548b2258d31"
 
-test = hex_array_to_string(digest("SHA256", "abcd", is_hex = true))
+test = oct2hex(digest("SHA256", "abcd", is_hex = true))
 @test test == "123d4c7ef2d1600a1b3a0f6addc60a10f05a3495c9409f2ecbf4cc095d000a6b"
 
 @test_throws ErrorException digest("asdf", "abcd")
 
-test = ec_pub_key(hex_string_to_array("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725"))
-@test hex_array_to_string(test) == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
+test = ec_pub_key(hex2oct("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725"))
+@test oct2hex(test) == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
 
 @test length(random(244)) == 31
 
@@ -39,11 +39,11 @@ ec_sign(a, priv_key)
 @test ec_verify(a, ec_sign(a, priv_key), pub_key)
 
 # Utilities
-# hex_string_to_array: empty string
-@test hex_string_to_array("") == []
-# hex_string_to_array: odd- and even-length strings
-@test hex_string_to_array("adfcef981") == [0x0a, 0xdf, 0xce, 0xf9, 0x81]
-@test hex_string_to_array("aadfcef981") == [0xaa, 0xdf, 0xce, 0xf9, 0x81]
+# hex2oct: empty string
+@test hex2oct("") == []
+# hex2oct: odd- and even-length strings
+@test hex2oct("adfcef981") == [0x0a, 0xdf, 0xce, 0xf9, 0x81]
+@test hex2oct("aadfcef981") == [0xaa, 0xdf, 0xce, 0xf9, 0x81]
 
 # SHA2 tests
 # Test empty string
