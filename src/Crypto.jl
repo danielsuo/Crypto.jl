@@ -18,6 +18,16 @@ module Crypto
 export init, cleanup, digest, random, ec_pub_key, ec_sign, ec_verify,
        hex_string_to_array, hex_array_to_string
 
+export COMPRESSED,
+       UNCOMPRESSED,
+       COMPRESSED_LENGTH,
+       UNCOMPRESSED_LENGTH,
+
+       # TODO: Assume maximum signature size is 144 bytes (way overkill)
+       SIGNATURE_SIZE,
+
+       NID_secp256k1
+
 ##############################################################################
 ##
 ## Load files

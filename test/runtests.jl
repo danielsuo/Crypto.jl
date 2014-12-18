@@ -9,6 +9,8 @@ using Base.Test
 
 init()
 
+# TODO: add convert integer to byte array tests, including BigInt
+
 test = hex_array_to_string(digest("SHA256", ""))
 @test test == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 

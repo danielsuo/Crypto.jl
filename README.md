@@ -11,6 +11,12 @@ Check out @staticfloat's pure Julia [SHA](https://github.com/staticfloat/SHA.jl)
 
 WARNING: This package experimental and is not ready for production use. The pure Julia implementations are not complete. Use at your own risk. 
 
+# Prior to next release
+- Update documentation to reflect new signatures and functions
+- Clean up tests
+- Fix RIPEMD160
+- Swap input/output order for func params in c functions
+
 # Usage
 This package will likely be updated frequently and may break with previous versions. If you use the code, we recommend using
 ```julia
