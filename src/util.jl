@@ -1,3 +1,5 @@
+import Base.convert
+
 function hex_string_to_array(hex_string::String)
   hex_length = length(hex_string)
 
@@ -14,4 +16,14 @@ end
 
 function hex_array_to_string(hex_array::Array{Uint8})
   return join([hex(h, 2) for h in hex_array], "")
+end
+
+# TODO: String manipulation is really not the best way
+function convert(::Type{Array{Uint8}}, x::Integer)
+  padding = 0
+  if typeof(x) != BigInt
+    padding = sizeof(x) * 2
+  end
+  hex_string = hex(x, padding)
+  return hex_string_to_array(hex_string)
 end
