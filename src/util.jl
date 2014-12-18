@@ -19,7 +19,7 @@ function oct2hex(hex_array::Array{Uint8})
 end
 
 # TODO: String manipulation is really not the best way
-function convert(::Type{Array{Uint8}}, x::Integer)
+function int2oct(x::Integer)
   padding = 0
   if typeof(x) != BigInt
     padding = sizeof(x) * 2
@@ -28,4 +28,27 @@ function convert(::Type{Array{Uint8}}, x::Integer)
     hex_string = hex(x)
   end
   return hex2oct(hex_string)
+end
+
+function oct2int(x::Array{Uint8})
+  result = BigInt(0)
+
+  for i in 1:length(x)
+    result <<= 8
+    result += x[i]
+  end
+
+  if length(x) <= 1
+    return uint8(result)
+  elseif length(x) <= 2
+    return uint16(result)
+  elseif length(x) <= 4
+    return uint32(result)
+  elseif length(x) <= 8
+    return uint64(result)
+  elseif length(x) <= 16
+    return uint128(result)
+  else
+    return result
+  end
 end
