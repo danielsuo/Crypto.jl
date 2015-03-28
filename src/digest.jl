@@ -20,11 +20,10 @@ function digest(name::String, data::String; is_hex=false)
   else
     data = data.data
   end
-
-  return digest(name, data)
+  digest(name, data)
 end
 
-function digest(name::String, data::Array{Uint8})
+function digest(name::String, data::Vector{UInt8})
   ctx = ccall((:EVP_MD_CTX_create, "libcrypto"), Ptr{Void}, ())
   try
     # Get the message digest struct
@@ -46,8 +45,11 @@ function digest(name::String, data::Array{Uint8})
     # Calculate the digest and store it in the uval array
     ccall((:EVP_DigestFinal_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Ptr{Uint}), ctx, uval, C_NULL)
 
-    return uval
+    # Convert the uval array to a string of hexes
+    return join([hex(h,2) for h in uval], "")
   finally
     ccall((:EVP_MD_CTX_destroy, "libcrypto"), Void, (Ptr{Void},), ctx)
   end
 end
+
+digest(name::String, data::IOBuffer) = digest(name, takebuf_array(data))
