@@ -1,6 +1,6 @@
 import Base.convert
 
-function hex2oct(hex_string::String)
+function hex2oct(hex_string::AbstractString)
   hex_length = length(hex_string)
 
   # Left pad with 0 to make hex_string even length
