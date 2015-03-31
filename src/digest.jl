@@ -14,16 +14,17 @@ function cleanup()
   ccall((:EVP_cleanup, "libcrypto"), Void, ())
 end
 
-function digest(name::String, data::String; is_hex=false)
+function digest(name::AbstractString, data::ByteString; is_hex=false)
   if is_hex
-    data = [uint8(parseint(data[2*i-1:2*i], 16)) for i in 1:length(data)/2]
+    L = round(Int,length(data)/2)
+    data = [@compat(parse(@compat(UInt8),SubString(data,2*i-1,2*i), 16)) for i in 1:L]
   else
     data = data.data
   end
   digest(name, data)
 end
 
-function digest(name::String, data::Vector{UInt8})
+function digest(name::AbstractString, data::Array{@compat(UInt8)})
   ctx = ccall((:EVP_MD_CTX_create, "libcrypto"), Ptr{Void}, ())
   try
     # Get the message digest struct
@@ -45,11 +46,10 @@ function digest(name::String, data::Vector{UInt8})
     # Calculate the digest and store it in the uval array
     ccall((:EVP_DigestFinal_ex, "libcrypto"), Void, (Ptr{Void}, Ptr{Uint8}, Ptr{Uint}), ctx, uval, C_NULL)
 
-    # Convert the uval array to a string of hexes
-    return join([hex(h,2) for h in uval], "")
+    return uval
   finally
     ccall((:EVP_MD_CTX_destroy, "libcrypto"), Void, (Ptr{Void},), ctx)
   end
 end
 
-digest(name::String, data::IOBuffer) = digest(name, takebuf_array(data))
+digest(name::AbstractString, data::IOBuffer) = digest(name, takebuf_array(data))

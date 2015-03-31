@@ -11,19 +11,19 @@ init()
 
 # TODO: add convert integer to byte array tests, including BigInt
 
-test = oct2hex(digest("SHA256", ""))
+test = bytes2hex(digest("SHA256", ""))
 @test test == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
-test = oct2hex(digest("RIPEMD160", ""))
+test = bytes2hex(digest("RIPEMD160", ""))
 @test test == "9c1185a5c5e9fc54612808977ee8f548b2258d31"
 
-test = oct2hex(digest("SHA256", "abcd", is_hex = true))
+test = bytes2hex(digest("SHA256", "abcd", is_hex = true))
 @test test == "123d4c7ef2d1600a1b3a0f6addc60a10f05a3495c9409f2ecbf4cc095d000a6b"
 
 @test_throws ErrorException digest("asdf", "abcd")
 
-test = ec_pub_key(hex2oct("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725"))
-@test oct2hex(test) == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
+test = ec_pub_key(hex2bytes("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725"))
+@test bytes2hex(test) == "0450863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b23522cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6"
 
 @test length(random(244)) == 31
 
