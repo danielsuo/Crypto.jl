@@ -5,8 +5,8 @@ function random(numbits)
     numbytes += 1
   end
 
-  ret = zeros(Uint8, numbytes)
-  ccall((:RAND_bytes, "libcrypto"), Void, (Ptr{Uint8}, Int), ret, numbytes)
+  ret = zeros(UInt8, numbytes)
+  ccall((:RAND_bytes, "libcrypto"), Void, (Ptr{UInt8}, Int), ret, numbytes)
 
   return ret
 end

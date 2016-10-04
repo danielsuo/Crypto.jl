@@ -113,7 +113,7 @@ function transform!(state, block)
   A0, B0, C0, D0, E0 = state
   A1, B1, C1, D1, E1 = state
 
-  X = zeros(Uint32, WORDS_PER_BLOCK)
+  X = zeros(UInt32, WORDS_PER_BLOCK)
 
   for i = 1:WORDS_PER_BLOCK
     X[i] = uint32(block[4 * (i - 1) + 4]) << 24 +
@@ -161,7 +161,7 @@ function ripemd160(msg::ASCIIString; is_hex=false)
 
   if is_hex
     len = int(length(msg) / 2)
-    result = zeros(Uint8, len)
+    result = zeros(UInt8, len)
     for i = 1:len
       result[i] = uint8(parseint(msg[2 * i - 1: 2 * i],16))
     end
@@ -196,11 +196,11 @@ function ripemd160(msg::ASCIIString; is_hex=false)
     # Append k bits '0', where k is the minimum number >= 0 such that the 
     # resulting message length (modulo 512 in bits) is 448.
     if length(msg) > BLOCK_SIZE - 8
-      msg = append!(msg, zeros(Uint8, BLOCK_SIZE - rem))
+      msg = append!(msg, zeros(UInt8, BLOCK_SIZE - rem))
       transform!(state, msg)
-      msg = zeros(Uint8, BLOCK_SIZE)
+      msg = zeros(UInt8, BLOCK_SIZE)
     else
-      msg = append!(msg, zeros(Uint8, BLOCK_SIZE - rem))
+      msg = append!(msg, zeros(UInt8, BLOCK_SIZE - rem))
     end
 
     # Append length of message (without the '1' bit or padding), in bits, as 

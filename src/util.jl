@@ -18,7 +18,7 @@ end
 function oct2hex(hex_array::Array{@compat(UInt8)})
   return join([hex(h, 2) for h in hex_array], "")
 end
-oct2hex(s::ByteString) = oct2hex(s.data)
+oct2hex(s::String) = oct2hex(s.data)
 
 # TODO: String manipulation is really not the best way
 function int2oct(x::Integer)
