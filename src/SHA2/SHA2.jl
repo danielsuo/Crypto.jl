@@ -127,7 +127,7 @@ S1(x) = (ROTRIGHT(x, 17) $ ROTRIGHT(x, 19) $ (x >>> 10))
 function transform!(state, block)
 
   # Pre-allocate the message schedule array (64 8-bit words)
-  m = zeros(Uint32, CHUNKS_PER_SCHEDULE)
+  m = zeros(UInt32, CHUNKS_PER_SCHEDULE)
 
   for i = 1:CHUNKS_PER_BLOCK
     m[i] = uint32(block[4 * (i - 1) + 1]) << 24 +
@@ -215,11 +215,11 @@ function sha256(msg::String; is_hex=false)
     # Append k bits '0', where k is the minimum number >= 0 such that the 
     # resulting message length (modulo 512 in bits) is 448.
     if length(msg) > BLOCK_SIZE - 8
-      msg = append!(msg, zeros(Uint8, BLOCK_SIZE - rem))
+      msg = append!(msg, zeros(UInt8, BLOCK_SIZE - rem))
       transform!(state, msg)
-      msg = zeros(Uint8, BLOCK_SIZE)
+      msg = zeros(UInt8, BLOCK_SIZE)
     else
-      msg = append!(msg, zeros(Uint8, BLOCK_SIZE - rem))
+      msg = append!(msg, zeros(UInt8, BLOCK_SIZE - rem))
     end
 
     # Append length of message (without the '1' bit or padding), in bits, as 

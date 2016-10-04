@@ -25,7 +25,7 @@ function ec_pub_key(priv_key::Array{UInt8}; curve_id = NID_secp256k1, form = UNC
 end
 
 # priv_key as hex string
-function ec_pub_key(priv_key::ByteString; curve_id = NID_secp256k1, form = UNCOMPRESSED)
+function ec_pub_key(priv_key::AbstractString; curve_id = NID_secp256k1, form = UNCOMPRESSED)
   ec_pub_key(hex2bytes(priv_key), curve_id = curve_id, form = form)
 end
 
