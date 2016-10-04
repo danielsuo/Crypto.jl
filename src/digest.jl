@@ -14,7 +14,7 @@ function cleanup()
   ccall((:EVP_cleanup, "libcrypto"), Void, ())
 end
 
-function digest(name::AbstractString, data::String; is_hex=false)
+function digest(name::AbstractString, data::AbstractString; is_hex=false)
   if is_hex
     L = round(Int,length(data)/2)
     data = [@compat(parse(@compat(UInt8),SubString(data,2*i-1,2*i), 16)) for i in 1:L]
